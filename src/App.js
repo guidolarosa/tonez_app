@@ -1,25 +1,51 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react';
+import Workspace from './components/Workspace.js';
+import Colors from './theme/Colors.js'
+import styled from 'styled-components';
+import Login from './components/Login.js';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useParams
+} from 'react-router-dom';
 
-function App() {
+const App = () => {
+  const Main = styled.section`
+    background-color: ${Colors.purple600};
+    height: 100vh;
+    min-width: 1280px;
+    & * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Gotham Rounded', sans-serif, monospace;
+    }
+  `;
+
+  const [workspace, setWorkspace] = useState({
+    'workspaceID':'1',
+    'workspaceName': 'My New Song'
+  })
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <Main>
+        <Router>
+          <Switch>
+            <Route path="/workspace/:userid/:username">
+              <Workspace
+                workspaceData={workspace}
+                getUserData={useParams}
+               >
+              </Workspace>
+            </Route>
+            <Route path="/login">
+              <Login />
+            </Route>
+          </Switch>
+        </Router>
+      </Main>
   );
 }
 
