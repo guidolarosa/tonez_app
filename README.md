@@ -1,5 +1,9 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Screenshot
+
+![Screenshot](https://github.com/guidolarosa/tonez_app/blob/master/public/screenshot.png?raw=true "Screenshot")
+
 ## Available Scripts
 
 In the project directory, you can run:
