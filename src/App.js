@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import Workspace from './components/Workspace.js';
-import Colors from './theme/Colors.js'
 import styled from 'styled-components';
+import * as firebase from 'firebase/app';
+import 'firebase/database';
+import 'firebase/auth';
+import Workspace from './components/Workspace.js';
+import Colors from './theme/Colors.js';
 import Login from './components/Login.js';
 import {
   BrowserRouter as Router,
@@ -24,18 +27,14 @@ const App = () => {
     }
   `;
 
-  const [workspace, setWorkspace] = useState({
-    'workspaceID':'1',
-    'workspaceName': 'My New Song'
-  })
+  const [workspaceID, setWorkspaceID] = useState(12345);
 
   return (
       <Main>
         <Router>
           <Switch>
-            <Route path="/workspace/:userid/:username">
+            <Route path={`/workspace/:userid/:${workspaceID}`}>
               <Workspace
-                workspaceData={workspace}
                 getUserData={useParams}
                >
               </Workspace>

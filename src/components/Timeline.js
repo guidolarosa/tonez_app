@@ -1,8 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import Colors from '../theme/Colors.js'
-import styled from 'styled-components';
+import styled, {keyframes} from 'styled-components';
 
 function Timeline(props) {
+    const fadeOpacity = keyframes`
+        0% {
+            opacity: .2
+        }
+
+        50% {
+            opacity: .5
+        }
+
+        100% {
+            opacity: .2
+        }
+    `;
+
     const Timeline = styled.section`
         color: ${Colors.purple100};
         padding: 20px 20px 0 0;
@@ -11,14 +25,31 @@ function Timeline(props) {
         h2 {
             display: inline-block;
         }
-        h1 {
-            font-size: 1.7rem;
-            margin-left: 20px;
-            opacity: .7;
+        .workspace-name-container {
             margin-bottom: 15px;
-            &:hover {
-                opacity: 1;
-                cursor: pointer;
+            &.loading-name {
+                h1 {
+                    animation: ${fadeOpacity} 2s ease-in-out infinite;
+                }
+            }
+            h1 {
+                font-size: 1.7rem;
+                margin-left: 20px;
+                opacity: .7;
+                &:hover {
+                    opacity: 1;
+                    cursor: pointer;
+                }
+            }
+            input {
+                border: none;
+                outline: none;
+                background: transparent;
+                border-bottom: 1px solid ${Colors.purple300};
+                color: white;
+                font-size: 1.3rem;
+                padding: 3px 10px;
+                font-weight: bold;
             }
         }
         h2 {
@@ -48,10 +79,33 @@ function Timeline(props) {
         return (replacedSpaces)
     }
 
+    const handleWorkspaceNameClick = () => {
+        const workspaceNameContainer = document.querySelector('.workspace-name-container');
+        if (!workspaceNameContainer.classList.contains('editing-name')) {
+            workspaceNameContainer.classList.add('editing-name');
+            const titleElement = workspaceNameContainer.querySelector('h1');
+            titleElement.innerHTML = "";
+            const input = document.createElement('input');
+            workspaceNameContainer.appendChild(input);
+        }
+    }
+
     return(
         <Timeline>
-            <h1>{props.workspaceData.workspaceName}</h1>
-            <h2>{`${formatName(props.userData.username)}`}</h2>
+            <section 
+                className={`workspace-name-container ${!props.proyectName ?
+                    'loading-name' :
+                    ''}
+                `}
+                onClick={handleWorkspaceNameClick}>
+                <h1>
+                    {!props.proyectName ?
+                        'Loading...' :
+                        props.proyectName
+                    }
+                </h1>
+                <h2>{`Guido La Rosa`}</h2>
+            </section>
             <section>
                 {props.tracks.map((track, index) => 
                     <section key={index} className="track-timeline">

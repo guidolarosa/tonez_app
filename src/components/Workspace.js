@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import {
-  useParams
-} from 'react-router-dom';
+import * as firebase from 'firebase/app';
+import 'firebase/database';
+import 'firebase/auth';
 import Colors from '../theme/Colors.js';
 import trackData from './../data/tracks.js';
 import TrackBar from './TrackBar.js';
@@ -21,17 +21,41 @@ function Workspace(props) {
 
   const [tracks, setTracks] = useState(trackData);
   const [selectedTrack, setSelectedTrack] = useState('');
+  const [proyectName, setProyectName] = useState(undefined);
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBDcgXgo6p-UIIXO83zv9mtS8Mlzff9daw",
+    authDomain: "tonez-85c72.firebaseapp.com",
+    databaseURL: "https://tonez-85c72.firebaseio.com",
+    projectId: "tonez-85c72",
+    storageBucket: "tonez-85c72.appspot.com",
+    messagingSenderId: "872522202210",
+    appId: "1:872522202210:web:f86b8c4118a50ea465a53b"
+  };
+
+  useEffect(() => {
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+    readFirebaseData(database);
+  },[])
+
+  const readFirebaseData = (database) => {
+    return database.ref('workspaces/').on('value', function(snapshot) {
+      let workspace= snapshot.child('12345');
+      let workspaceNameSS = workspace.child('workspace_name');
+      let proyectName = workspaceNameSS.val();
+      setProyectName(proyectName);
+    });
+  }
 
   return (
     <Workspace>
       <TrackBar
         tracks={tracks} 
-        workspaceData={props.workspaceData}
       />
       <Timeline
+        proyectName={proyectName}
         tracks={tracks}
-        workspaceData={props.workspaceData}
-        userData={props.getUserData()}
       />
       <Controls
         tracks={tracks}
